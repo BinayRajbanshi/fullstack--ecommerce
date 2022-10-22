@@ -5,13 +5,23 @@ import connectDB from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
+import cors from "cors";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 dotenv.config();
 connectDB();
 
 app.use("/api/products", productRoutes);
-app.use("/api/users", productRoutes);
+app.use("/api/users", userRoutes);
 
 // case if the user hits the route other than mentioned above
 app.use(notFound);

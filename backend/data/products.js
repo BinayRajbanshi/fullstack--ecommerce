@@ -41,7 +41,7 @@ const products = [
     description:
       "The ultimate home entertainment center starts with PlayStation. Whether you are into gaming, HD movies, television, music",
     brand: "Sony",
-    category: "Electronics",
+    category: "Console",
     price: 399.99,
     countInStock: 11,
     rating: 5,
@@ -65,7 +65,7 @@ const products = [
     description:
       "Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space",
     brand: "Amazon",
-    category: "Electronics",
+    category: "Speaker",
     price: 29.99,
     countInStock: 0,
     rating: 4,

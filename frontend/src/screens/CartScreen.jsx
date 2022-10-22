@@ -86,7 +86,7 @@ const Cart = () => {
                           ))}
                         </Form.Control>
                       </Col>
-                      <Col md={2}>
+                      <Col md={1}>
                         <Button
                           type="button"
                           variant="light"

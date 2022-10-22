@@ -17,6 +17,16 @@ export const listProduct = () => async (dispatch) => {
       type: PRODUCT_LIST_SUCCESS,
       payload: data,
     });
+
+    const allCategories = [
+      "all",
+      ...new Set(data.map((item) => item.category)),
+    ];
+
+    dispatch({
+      type: "GET_CATEGORIES",
+      payload: allCategories,
+    });
   } catch (error) {
     dispatch({
       type: PRODUCT_LIST_FAIL,

@@ -6,12 +6,18 @@ import {
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
 } from "../constants/productConstants";
-export const productListReducer = (state = { products: [] }, action) => {
+export const productListReducer = (
+  state = { products: [], allCategories: [] },
+  action
+) => {
   if (action.type === PRODUCT_LIST_REQUEST) {
     return { loading: true, products: [] };
   }
   if (action.type === PRODUCT_LIST_SUCCESS) {
-    return { loading: false, products: action.payload };
+    return { loading: true, products: action.payload };
+  }
+  if (action.type === "GET_CATEGORIES") {
+    return { ...state, allCategories: action.payload, loading: false };
   }
   if (action.type === PRODUCT_LIST_FAIL) {
     return { loading: false, error: action.payload };
@@ -31,6 +37,22 @@ export const productDetailsReducer = (
   }
   if (action.type === PRODUCT_DETAILS_FAIL) {
     return { loading: false, error: action.payload };
+  }
+  return state;
+};
+
+// get the data in inital render
+
+// this is the function for filtering the products when clicked on the button
+export const productFilterReducer = (
+  state = { filteredProducts: [] },
+  action
+) => {
+  if ((action.type = "PROD_FILTER_REQ")) {
+    return { loading: true, filteredProducts: [] };
+  }
+  if ((action.type = "PROD_FILTER_SUCCESS")) {
+    return { loading: false, filteredProducts: action.payload };
   }
   return state;
 };
