@@ -85,3 +85,11 @@ const generateToken = (id) => {
     expiresIn: "10d",
   });
 };
+
+// @desc    gets user allUsers
+// @route   GET /api/users
+// @access  private/ADMIN
+export const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
+});

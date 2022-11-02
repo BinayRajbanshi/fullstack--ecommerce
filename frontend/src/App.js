@@ -6,6 +6,10 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SingleProduct from "./screens/SingleProductScreen";
+// import UserListScreen from "./screens/UserListScreen";
+import ProductListScreen from "./screens/ProductListScreen";
+import ProductEditScreen from "./screens/ProductEditScreen";
+
 function App() {
   return (
     <BrowserRouter>
@@ -18,6 +22,14 @@ function App() {
           <Route to path="/product/:id" element={<SingleProduct />} />
           <Route to path="/cart" element={<Cart />} />
           <Route to path="/cart/:id" element={<Cart />} />
+          {/* <Route to path="/admin/userlist" element={<UserListScreen />} /> */}
+          {/* admin product screen  */}
+          <Route to path="/admin/products" element={<ProductListScreen />} />
+          <Route
+            to
+            path="/admin/product/:productId/edit"
+            element={<ProductEditScreen />}
+          />
         </Routes>
       </main>
       <Footer />

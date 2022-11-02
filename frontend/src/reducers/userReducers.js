@@ -6,6 +6,9 @@ import {
   USER_REGISTER_SUCCESS,
   USER_REGISTER_REQUEST,
   USER_REGISTER_FAIL,
+  USER_LIST_SUCCESS,
+  USER_LIST_REQUEST,
+  USER_LIST_FAIL,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -32,6 +35,19 @@ export const userRegisterReducer = (state = {}, action) => {
     return { loading: false, userInfo: action.payload };
   }
   if (action.type === USER_REGISTER_FAIL) {
+    return { loading: false, error: action.payload };
+  }
+  return state;
+};
+
+export const userListReducer = (state = {}, action) => {
+  if (action.type === USER_LIST_REQUEST) {
+    return { loading: true };
+  }
+  if (action.type === USER_LIST_SUCCESS) {
+    return { loading: false, users: action.payload };
+  }
+  if (action.type === USER_LIST_FAIL) {
     return { loading: false, error: action.payload };
   }
   return state;

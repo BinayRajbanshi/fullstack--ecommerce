@@ -1,9 +1,11 @@
 import express from "express";
+import path from "path";
 import dotenv from "dotenv";
 import colors from "colors";
 import connectDB from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 import cors from "cors";
 
@@ -14,7 +16,7 @@ app.use(
     origin: "*",
   })
 );
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 dotenv.config();
@@ -22,8 +24,11 @@ connectDB();
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/upload", uploadRoutes);
 
-// case if the user hits the route other than mentioned above
+const __dirname = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
 app.use(notFound);
 
 // overriding default error handler that sends error in the form of html

@@ -39,7 +39,7 @@ const SingleProduct = () => {
   };
 
   const {
-    image: img,
+    image,
     rating,
     name,
     description,
@@ -63,7 +63,7 @@ const SingleProduct = () => {
           </Link>
           <Row>
             <Col md={6}>
-              <Image src={img} alt={name}></Image>
+              <Image src={image} alt={name}></Image>
             </Col>
             <Col md={3}>
               <ListGroup varient="flush">
