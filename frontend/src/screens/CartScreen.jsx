@@ -40,7 +40,8 @@ const Cart = () => {
 
   const handleCheckout = () => {
     console.log("this is checkout function");
-    navigate("/login?redirect");
+    // navigate("/login?redirect");
+    console.log("handle checkout");
   };
 
   return (
