@@ -25,6 +25,16 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cartItems } = useSelector((store) => store.cart);
+
+  const { userInfo } = useSelector((store) => store.userLogin) || {};
+  // const { userInfo: infoRegister} = useSelector((store) => store.userRegister);
+  // let user_info;
+  // if (!infoLogin) {
+  //   user_info = infoRegister;
+  // } else {
+  //   user_info = infoLogin;
+  // }
+
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const qty = searchParams.get("qty");
@@ -39,9 +49,17 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    console.log("this is checkout function");
-    // navigate("/login?redirect");
-    console.log("handle checkout");
+    if (!userInfo) {
+      navigate("/login");
+    } else {
+      navigate("/shipping");
+    }
+    // navigate("/login?redirect=/shipping");
+    // if (!userInfo) {
+    //   navigate("/login");
+    // } else if (userInfo) {
+    //   navigate("/shipping");
+    // }
   };
 
   return (

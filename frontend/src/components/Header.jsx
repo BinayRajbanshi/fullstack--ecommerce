@@ -7,13 +7,39 @@ import { AiOutlineShoppingCart, AiOutlineUserAdd } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../actions/userActions";
+import { ORDER_MYLIST_RESET } from "../constants/orderConstants";
+import {
+  USER_DETAILS_RESET,
+  USER_UPDATE_RESET,
+  USER_LIST_RESET,
+} from "../constants/userConstants";
 
 function Header() {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((store) => store.userLogin);
+  const { userInfo: infoLogin } = useSelector((store) => store.userLogin);
+  const { userInfo: infoRegister } = useSelector((store) => store.userRegister);
+
+  let user_info;
+  if (!infoLogin) {
+    user_info = infoRegister;
+  } else {
+    user_info = infoLogin;
+  }
 
   const logoutHandler = () => {
     dispatch(logout());
+    dispatch({
+      type: ORDER_MYLIST_RESET,
+    });
+    dispatch({
+      type: USER_DETAILS_RESET,
+    });
+    dispatch({
+      type: USER_UPDATE_RESET,
+    });
+    dispatch({
+      type: USER_LIST_RESET,
+    });
   };
   return (
     <header>
@@ -29,13 +55,31 @@ function Header() {
                 <AiOutlineShoppingCart className="me-1 mb-1" />
                 Cart
               </Nav.Link>
-              {userInfo && userInfo.admin && (
-                <Nav.Link as={Link} to="admin/products">
-                  Admin Products
-                </Nav.Link>
-              )}
-              {userInfo ? (
-                <NavDropdown title={userInfo.name} id="username">
+
+              {user_info ? (
+                <NavDropdown
+                  title={`${user_info.name} The admin`}
+                  id="username"
+                >
+                  {user_info.admin ? (
+                    <NavDropdown.Item as={Link} to="/admin/users">
+                      Users
+                    </NavDropdown.Item>
+                  ) : (
+                    <NavDropdown.Item as={Link} to="/profile">
+                      Profile
+                    </NavDropdown.Item>
+                  )}
+                  {user_info && user_info.admin && (
+                    <>
+                      <NavDropdown.Item as={Link} to="admin/products">
+                        Products
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="admin/orders">
+                        Orders
+                      </NavDropdown.Item>
+                    </>
+                  )}
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item>

@@ -12,7 +12,9 @@ import React from "react";
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
   const [name, setName] = useState("");
+  const [errMsg, setErrMsg] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,12 +30,17 @@ const RegisterScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(register(name, email, password));
+    if (password === passwordCheck) {
+      dispatch(register(name, email, password));
+    } else {
+      setErrMsg("Your Passwords do not match");
+    }
   };
 
   return (
     <FormContainer>
       <h1>Register</h1>
+      {errMsg && <Message variant="danger">{errMsg}</Message>}
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
@@ -59,6 +66,16 @@ const RegisterScreen = () => {
 
         <Form.Group controlId="password" className="mb-4">
           <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Enter password"
+            value={passwordCheck}
+            onChange={(e) => setPasswordCheck(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group controlId="password" className="mb-4">
+          <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             type="password"
             placeholder="Enter password"
