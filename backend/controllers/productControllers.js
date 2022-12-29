@@ -5,7 +5,16 @@ import Product from "../models/productModel.js";
 // @route   GET /api/products
 // @access  Public
 export const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find();
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+
+  const products = await Product.find({ ...keyword });
 
   if (products) {
     res.status(200).json(products);
@@ -13,6 +22,15 @@ export const getProducts = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("products not found");
   }
+});
+
+// @desc    Fetch top 3 products
+// @route   GET /api/products/top
+// @access  Public
+export const getTopProducts = asyncHandler(async (req, res) => {
+  const topProducts = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+  res.json(topProducts);
 });
 
 // @desc    Fetch single product
@@ -84,6 +102,39 @@ export const updateProduct = asyncHandler(async (req, res) => {
     res.json(updatedProduct);
   } else {
     res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
+// @desc    creates a product review
+// @route   PUT /api/products/:id/reviews
+// @access  Private
+export const createProductReview = asyncHandler(async (req, res) => {
+  const { comment, rating } = req.body;
+  const product = await Product.findById(req.params.id);
+  if (product) {
+    const alreadyReviewed = product.reviews.find(
+      (item) => item.user.toString() === req.data._id.toString()
+    );
+    if (alreadyReviewed) {
+      res.status(400);
+      throw new Error("Product Already Reviewed");
+    }
+    const review = {
+      user: req.data._id,
+      name: req.data.name,
+      comment,
+      review: Number(rating),
+    };
+    product.reviews = [...product.reviews, review];
+    product.numReviews = product.reviews.length;
+    product.rating =
+      product.reviews.reduce((acc, item) => item.review + acc, 0) /
+      product.numReviews;
+    await product.save();
+    res.status(200).json({ message: "Product reviewed succesfully" });
+  } else {
+    res.status(400);
     throw new Error("Product not found");
   }
 });

@@ -9,6 +9,7 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 import cors from "cors";
+import morgan from "morgan";
 
 const app = express();
 
@@ -22,6 +23,10 @@ app.use(express.json());
 
 dotenv.config();
 connectDB();
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));

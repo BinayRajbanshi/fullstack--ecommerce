@@ -37,6 +37,7 @@ function App() {
             <Route to path="/login" element={<LoginScreen />}></Route>
             <Route to path="/register" element={<RegisterScreen />}></Route>
             <Route to path="/" element={<HomeScreen />}></Route>
+            <Route to path="/search/:keyword" element={<HomeScreen />}></Route>
             <Route to path="/product/:id" element={<SingleProduct />} />
             <Route to path="/cart" element={<Cart />} />
             <Route to path="/cart/:id" element={<Cart />} />

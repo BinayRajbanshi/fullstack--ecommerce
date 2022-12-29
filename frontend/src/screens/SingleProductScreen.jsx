@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { productDetails } from "../actions/productActions";
+import { productDetails, productReview } from "../actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 
@@ -17,9 +17,12 @@ import {
 import { Link } from "react-router-dom";
 import Rating from "../components/Rating";
 import { useSelector, useDispatch } from "react-redux";
+import { PRODUCT_REVIEW_RESET } from "../constants/productConstants";
 
 const SingleProduct = () => {
   const [qty, setQty] = useState(1);
+  const [comment, setComment] = useState("");
+  const [review, setReview] = useState(0);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,12 +30,26 @@ const SingleProduct = () => {
   const { loading, error, product } = useSelector(
     (store) => store.productDetails
   );
-  const { cartItems } = useSelector((store) => store.cart);
+  const {
+    loading: reviewLoading,
+    error: reviewError,
+    success,
+  } = useSelector((store) => {
+    return store.productReview;
+  });
+  const { userInfo } = useSelector((state) => state.userLogin);
   const { id } = useParams();
 
   useEffect(() => {
+    if (success) {
+      setReview(0);
+      setComment("");
+    }
     dispatch(productDetails(id));
-  }, [dispatch, id]);
+    dispatch({
+      type: PRODUCT_REVIEW_RESET,
+    });
+  }, [dispatch, id, success]);
 
   const addToCartHandler = (e) => {
     e.preventDefault();
@@ -50,6 +67,11 @@ const SingleProduct = () => {
     countInStock,
     numReviews,
   } = product;
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(productReview(id, comment, review));
+  };
 
   return (
     <>
@@ -72,8 +94,10 @@ const SingleProduct = () => {
                   <h3>{name}</h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <Rating rating={rating} numReviews={numReviews} />
+                  <Rating rating={rating} />
+                  <p>{numReviews} people reviewed the product</p>
                 </ListGroup.Item>
+                <ListGroup.Item>Brand: {brand}</ListGroup.Item>
                 <ListGroup.Item>Price: {price}</ListGroup.Item>
                 <ListGroup.Item>Description: {description}</ListGroup.Item>
               </ListGroup>
@@ -140,6 +164,79 @@ const SingleProduct = () => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
+            </Col>
+          </Row>
+          <Row className="mt-4">
+            <Col>
+              <h2>Reviews</h2>
+              {product.reviews.length === 0 && (
+                <Message>No Reviews Yet</Message>
+              )}
+              <ListGroup variant="flush">
+                {product.reviews.map((review) => {
+                  return (
+                    <ListGroup.Item key={review._id}>
+                      <p style={{ fontSize: "16px", fontWeight: 600 }}>
+                        {review.name}
+                      </p>
+                      <Rating rating={review.review} />
+                      <p>{review.comment}</p>
+                    </ListGroup.Item>
+                  );
+                })}
+              </ListGroup>
+              <ListGroup>
+                <ListGroup.Item>
+                  <h2>Write a Reveiw</h2>
+                  {userInfo ? (
+                    <Form onSubmit={submitHandler}>
+                      <Form.Group controlId="rating">
+                        <Form.Label>Rating</Form.Label>
+                        <Form.Control
+                          required
+                          as="select"
+                          value={review}
+                          onChange={(e) => setReview(e.target.value)}
+                        >
+                          <option value="">Select...</option>
+                          <option value="1">1 - Poor</option>
+                          <option value="2">2 - Fair</option>
+                          <option value="3">3 - Good</option>
+                          <option value="4">4 - Very Good</option>
+                          <option value="5">5 - Excellent</option>
+                        </Form.Control>
+                      </Form.Group>
+                      <Form.Group controlId="comment" className="mt-4">
+                        <Form.Label>Comment</Form.Label>
+                        <Form.Control
+                          required
+                          as="textarea"
+                          row="3"
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                        ></Form.Control>
+                      </Form.Group>
+                      {reviewError && (
+                        <Message variant="danger">{reviewError}</Message>
+                      )}
+                      {reviewLoading && <Loader />}
+                      <Button
+                        className="mt-4"
+                        disabled={reviewLoading}
+                        type="submit"
+                        variant="primary"
+                      >
+                        Submit
+                      </Button>
+                    </Form>
+                  ) : (
+                    <Message variant="danger">
+                      Please <Link to="/login">login</Link> to your account to
+                      write a reveiw.
+                    </Message>
+                  )}
+                </ListGroup.Item>
+              </ListGroup>
             </Col>
           </Row>
         </Container>

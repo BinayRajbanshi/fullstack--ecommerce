@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import PaymentSteps from "../components/PaymentSteps";
 import { placeOrder } from "../actions/orderActions";
 import { useNavigate } from "react-router-dom";
+import { ORDER_CREATE_RESET } from "../constants/orderConstants";
 
 const PlaceOrderScreen = () => {
   const cart = useSelector((state) => state.cart);
@@ -60,6 +61,7 @@ const PlaceOrderScreen = () => {
   useEffect(() => {
     if (success) {
       navigate(`/order/${orderDetails._id}`);
+      dispatch({ type: ORDER_CREATE_RESET });
     }
     // eslint-disable-next-line
   }, [navigate, success]);

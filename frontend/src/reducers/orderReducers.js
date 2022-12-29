@@ -20,6 +20,7 @@ import {
   ORDER_DELIVER_FAIL,
   ORDER_DELIVER_SUCCESS,
   ORDER_DELIVER_RESET,
+  ORDER_CREATE_RESET,
 } from "../constants/orderConstants";
 
 const orderCreateReducer = (state = {}, action) => {
@@ -37,6 +38,9 @@ const orderCreateReducer = (state = {}, action) => {
   }
   if (action.type === ORDER_CREATE_FAIL) {
     return { loading: false, error: action.payload };
+  }
+  if (action.type === ORDER_CREATE_RESET) {
+    return {};
   }
   return state;
 };

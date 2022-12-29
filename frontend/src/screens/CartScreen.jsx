@@ -27,13 +27,6 @@ const Cart = () => {
   const { cartItems } = useSelector((store) => store.cart);
 
   const { userInfo } = useSelector((store) => store.userLogin) || {};
-  // const { userInfo: infoRegister} = useSelector((store) => store.userRegister);
-  // let user_info;
-  // if (!infoLogin) {
-  //   user_info = infoRegister;
-  // } else {
-  //   user_info = infoLogin;
-  // }
 
   const { id } = useParams();
   const [searchParams] = useSearchParams();

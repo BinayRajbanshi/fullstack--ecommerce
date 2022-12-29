@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 // review schema made in this file because file is small and only need in this particular file
 
 const reviewSchema = mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   name: { type: String, required: true },
   review: { type: Number, required: true },
   comment: { type: String, required: true },

@@ -1,6 +1,6 @@
 import { BsStarFill, BsStar, BsStarHalf } from "react-icons/bs";
 
-const Rating = ({ numReviews, rating }) => {
+const Rating = ({ rating }) => {
   return (
     <div className="rating">
       <span>
@@ -49,7 +49,7 @@ const Rating = ({ numReviews, rating }) => {
           <BsStar />
         )}
       </span>
-      <p>{numReviews} reviews</p>
+      {/* <p>{numReviews} reviews</p> */}
     </div>
   );
 };

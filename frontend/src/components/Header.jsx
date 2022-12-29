@@ -13,6 +13,7 @@ import {
   USER_UPDATE_RESET,
   USER_LIST_RESET,
 } from "../constants/userConstants";
+import SearchBox from "./SearchBox";
 
 function Header() {
   const dispatch = useDispatch();
@@ -50,15 +51,20 @@ function Header() {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <SearchBox />
             <Nav className="ms-auto">
               <Nav.Link as={Link} to="/cart">
                 <AiOutlineShoppingCart className="me-1 mb-1" />
                 Cart
               </Nav.Link>
-
+              {/* {`${user_info.name}`} */}
               {user_info ? (
                 <NavDropdown
-                  title={`${user_info.name} The admin`}
+                  title={
+                    user_info.admin
+                      ? `${user_info.name} (Admin)`
+                      : `${user_info.name}`
+                  }
                   id="username"
                 >
                   {user_info.admin ? (

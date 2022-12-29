@@ -16,6 +16,15 @@ import {
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
   PRODUCT_UPDATE_FAIL,
+  PRODUCT_REVIEW_REQUEST,
+  PRODUCT_REVIEW_FAIL,
+  PRODUCT_REVIEW_SUCCESS,
+  PRODUCT_REVIEW_RESET,
+  PRODUCT_SEARCH_REQUEST,
+  PRODUCT_SEARCH_SUCCESS,
+  PRODUCT_SEARCH_FAIL,
+  PRODUCT_TOP_REQUEST,
+  PRODUCT_TOP_SUCCESS,
 } from "../constants/productConstants";
 export const productListReducer = (
   state = { products: [], allCategories: [] },
@@ -36,6 +45,18 @@ export const productListReducer = (
   return state;
 };
 
+export const productSearchReducer = (state = {}, action) => {
+  if (action.type === PRODUCT_SEARCH_REQUEST) {
+    return { loading: true };
+  }
+  if (action.type === PRODUCT_SEARCH_SUCCESS) {
+    return { loading: false, product: action.payload };
+  }
+  if (action.type === PRODUCT_SEARCH_FAIL) {
+    return { loading: false, error: action.payload };
+  }
+  return state;
+};
 export const productDetailsReducer = (
   state = { product: { reviews: [] } },
   action
@@ -109,6 +130,35 @@ export const productUpdateReducer = (state = { product: {} }, action) => {
   }
   if (action.type === PRODUCT_UPDATE_RESET) {
     return { product: {} };
+  }
+  return state;
+};
+
+export const productReviewReducer = (state = {}, action) => {
+  if (action.type === PRODUCT_REVIEW_REQUEST) {
+    return { loading: true };
+  }
+  if (action.type === PRODUCT_REVIEW_SUCCESS) {
+    return { loading: false, success: true };
+  }
+  if (action.type === PRODUCT_REVIEW_FAIL) {
+    return { loading: false, error: action.payload };
+  }
+  if (action.type === PRODUCT_REVIEW_RESET) {
+    return {};
+  }
+  return state;
+};
+
+export const productTopReducer = (state = {}, action) => {
+  if (action.type === PRODUCT_TOP_REQUEST) {
+    return { loading: true };
+  }
+  if (action.type === PRODUCT_TOP_SUCCESS) {
+    return { loading: false, products: action.payload };
+  }
+  if (action.type === PRODUCT_DETAILS_FAIL) {
+    return { loading: false, error: action.payload };
   }
   return state;
 };
